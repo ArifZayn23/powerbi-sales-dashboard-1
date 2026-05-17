@@ -1,0 +1,176 @@
+
+<h2 class="sr-only">Sample Power BI–style beginner sales dashboard with KPI cards, bar chart, line chart, and donut chart.</h2>
+
+<style>
+  .dash-root { font-family: var(--font-sans); padding: 0; }
+  .top-bar { display: flex; align-items: center; justify-content: space-between; padding: 14px 20px 10px; border-bottom: 0.5px solid var(--color-border-tertiary); }
+  .top-bar-left { display: flex; align-items: center; gap: 10px; }
+  .pbi-logo { width: 22px; height: 22px; }
+  .report-title { font-size: 15px; font-weight: 500; color: var(--color-text-primary); }
+  .report-sub { font-size: 12px; color: var(--color-text-secondary); }
+  .top-actions { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--color-text-secondary); }
+  .badge { background: #F2C811; color: #1a1200; font-size: 10px; font-weight: 500; padding: 2px 8px; border-radius: 10px; }
+  .filter-bar { display: flex; gap: 10px; padding: 10px 20px; border-bottom: 0.5px solid var(--color-border-tertiary); flex-wrap: wrap; }
+  .filter-chip { display: flex; align-items: center; gap: 5px; font-size: 12px; border: 0.5px solid var(--color-border-secondary); border-radius: 4px; padding: 4px 10px; color: var(--color-text-secondary); cursor: pointer; background: var(--color-background-primary); }
+  .filter-chip.active { border-color: #F2C811; background: #fffbe6; color: #7a5c00; }
+  .kpi-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; padding: 14px 20px 0; }
+  .kpi-card { background: var(--color-background-secondary); border-radius: var(--border-radius-md); padding: 14px 16px; }
+  .kpi-label { font-size: 11px; color: var(--color-text-secondary); text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 4px; }
+  .kpi-value { font-size: 22px; font-weight: 500; color: var(--color-text-primary); line-height: 1.1; }
+  .kpi-change { font-size: 11px; margin-top: 4px; display: flex; align-items: center; gap: 3px; }
+  .up { color: #2e7d32; } .down { color: #c62828; }
+  .charts-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 12px; padding: 14px 20px; }
+  .chart-card { background: var(--color-background-primary); border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-lg); padding: 16px; }
+  .chart-title { font-size: 13px; font-weight: 500; color: var(--color-text-primary); margin-bottom: 12px; }
+  .bottom-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; padding: 0 20px 20px; }
+  .legend-row { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 10px; font-size: 11px; color: var(--color-text-secondary); }
+  .legend-dot { width: 10px; height: 10px; border-radius: 2px; display: inline-block; margin-right: 4px; }
+  .table-row { display: grid; grid-template-columns: 1fr 80px 70px; gap: 8px; padding: 7px 0; border-bottom: 0.5px solid var(--color-border-tertiary); font-size: 12px; color: var(--color-text-primary); align-items: center; }
+  .table-row.header { color: var(--color-text-secondary); font-size: 11px; font-weight: 500; border-bottom: 0.5px solid var(--color-border-secondary); }
+  .bar-fill { height: 10px; border-radius: 2px; background: #F2C811; }
+  .prog-wrap { background: var(--color-background-secondary); border-radius: 2px; height: 10px; overflow: hidden; }
+</style>
+
+<div class="dash-root">
+  <div class="top-bar">
+    <div class="top-bar-left">
+      <svg class="pbi-logo" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="2" y="12" width="5" height="10" rx="1" fill="#F2C811"/>
+        <rect x="9.5" y="7" width="5" height="15" rx="1" fill="#F2C811" opacity="0.75"/>
+        <rect x="17" y="2" width="5" height="20" rx="1" fill="#F2C811" opacity="0.5"/>
+      </svg>
+      <div>
+        <div class="report-title">Sales Performance Dashboard</div>
+        <div class="report-sub">FY 2024 · All Regions</div>
+      </div>
+    </div>
+    <div class="top-actions">
+      <span class="badge">Power BI</span>
+      <i class="ti ti-refresh" aria-hidden="true" style="font-size:16px;"></i>
+      <i class="ti ti-share" aria-hidden="true" style="font-size:16px;"></i>
+    </div>
+  </div>
+
+  <div class="filter-bar">
+    <div class="filter-chip active"><i class="ti ti-calendar" aria-hidden="true" style="font-size:13px;"></i> 2024</div>
+    <div class="filter-chip"><i class="ti ti-map-pin" aria-hidden="true" style="font-size:13px;"></i> All Regions ▾</div>
+    <div class="filter-chip"><i class="ti ti-package" aria-hidden="true" style="font-size:13px;"></i> All Categories ▾</div>
+    <div class="filter-chip"><i class="ti ti-user" aria-hidden="true" style="font-size:13px;"></i> All Reps ▾</div>
+  </div>
+
+  <div class="kpi-row">
+    <div class="kpi-card">
+      <div class="kpi-label">Total Revenue</div>
+      <div class="kpi-value">$2.4M</div>
+      <div class="kpi-change up"><i class="ti ti-trending-up" style="font-size:13px;" aria-hidden="true"></i> +18.3% vs last year</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Total Orders</div>
+      <div class="kpi-value">8,142</div>
+      <div class="kpi-change up"><i class="ti ti-trending-up" style="font-size:13px;" aria-hidden="true"></i> +9.1% vs last year</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Avg Order Value</div>
+      <div class="kpi-value">$295</div>
+      <div class="kpi-change up"><i class="ti ti-trending-up" style="font-size:13px;" aria-hidden="true"></i> +8.4% vs last year</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Return Rate</div>
+      <div class="kpi-value">3.2%</div>
+      <div class="kpi-change down"><i class="ti ti-trending-down" style="font-size:13px;" aria-hidden="true"></i> +0.4% vs last year</div>
+    </div>
+  </div>
+
+  <div class="charts-grid">
+    <div class="chart-card">
+      <div class="chart-title">Monthly revenue & target</div>
+      <div class="legend-row">
+        <span><span class="legend-dot" style="background:#F2C811;"></span>Revenue</span>
+        <span><span class="legend-dot" style="background:#B0B0B0;"></span>Target</span>
+      </div>
+      <div style="position:relative;width:100%;height:180px;">
+        <canvas id="barChart" role="img" aria-label="Bar chart of monthly revenue vs target for Jan–Dec 2024. Revenue tracks close to target with peaks in Mar, Jun, Sep, Dec.">Monthly revenue and target comparison for 2024.</canvas>
+      </div>
+    </div>
+    <div class="chart-card">
+      <div class="chart-title">Revenue by category</div>
+      <div style="position:relative;width:100%;height:180px; display:flex; align-items:center; justify-content:center;">
+        <canvas id="donutChart" role="img" aria-label="Donut chart of revenue by category: Electronics 40%, Clothing 25%, Home 20%, Other 15%.">Revenue split: Electronics 40%, Clothing 25%, Home 20%, Other 15%.</canvas>
+      </div>
+    </div>
+  </div>
+
+  <div class="bottom-grid">
+    <div class="chart-card">
+      <div class="chart-title">Revenue trend — last 6 months</div>
+      <div style="position:relative;width:100%;height:130px;">
+        <canvas id="lineChart" role="img" aria-label="Line chart showing revenue trend over the last 6 months, generally increasing from July to December 2024.">Revenue trend Jul–Dec 2024, rising from $170K to $260K.</canvas>
+      </div>
+    </div>
+    <div class="chart-card">
+      <div class="chart-title">Top products by revenue</div>
+      <div class="table-row header"><span>Product</span><span>Revenue</span><span>Share</span></div>
+      <div class="table-row"><span>Laptop Pro X</span><span>$540K</span><div class="prog-wrap"><div class="bar-fill" style="width:100%"></div></div></div>
+      <div class="table-row"><span>Smart Watch S</span><span>$390K</span><div class="prog-wrap"><div class="bar-fill" style="width:72%"></div></div></div>
+      <div class="table-row"><span>Wireless Buds</span><span>$310K</span><div class="prog-wrap"><div class="bar-fill" style="width:57%"></div></div></div>
+      <div class="table-row"><span>Tablet Air</span><span>$240K</span><div class="prog-wrap"><div class="bar-fill" style="width:44%"></div></div></div>
+      <div class="table-row"><span>USB-C Hub</span><span>$175K</span><div class="prog-wrap"><div class="bar-fill" style="width:32%"></div></div></div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+const isDark = matchMedia('(prefers-color-scheme: dark)').matches;
+const gridColor = isDark ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.06)';
+const textColor = isDark ? '#aaa' : '#888';
+
+new Chart(document.getElementById('barChart'), {
+  type: 'bar',
+  data: {
+    labels: ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],
+    datasets: [
+      { label: 'Revenue', data: [160,175,210,190,205,230,185,200,245,215,240,260], backgroundColor: '#F2C811', borderRadius: 3, barPercentage: 0.5, categoryPercentage: 0.7 },
+      { label: 'Target', data: [170,180,200,195,210,220,195,205,235,220,235,250], type: 'line', borderColor: '#B0B0B0', borderDash: [4,3], pointRadius: 0, fill: false, tension: 0.3, borderWidth: 1.5 }
+    ]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: { legend: { display: false } },
+    scales: {
+      x: { grid: { display: false }, ticks: { color: textColor, font: { size: 10 } } },
+      y: { grid: { color: gridColor }, ticks: { color: textColor, font: { size: 10 }, callback: v => '$' + v + 'K' }, border: { display: false } }
+    }
+  }
+});
+
+new Chart(document.getElementById('donutChart'), {
+  type: 'doughnut',
+  data: {
+    labels: ['Electronics','Clothing','Home','Other'],
+    datasets: [{ data: [40,25,20,15], backgroundColor: ['#F2C811','#3266ad','#2e7d32','#b0b0b0'], borderWidth: 0, hoverOffset: 4 }]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false, cutout: '65%',
+    plugins: {
+      legend: { position: 'right', labels: { color: textColor, font: { size: 10 }, boxWidth: 10, padding: 10 } }
+    }
+  }
+});
+
+new Chart(document.getElementById('lineChart'), {
+  type: 'line',
+  data: {
+    labels: ['Jul','Aug','Sep','Oct','Nov','Dec'],
+    datasets: [{ data: [185,200,245,215,240,260], borderColor: '#F2C811', backgroundColor: 'rgba(242,200,17,0.12)', fill: true, tension: 0.4, pointRadius: 3, pointBackgroundColor: '#F2C811', borderWidth: 2 }]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: { legend: { display: false } },
+    scales: {
+      x: { grid: { display: false }, ticks: { color: textColor, font: { size: 10 } } },
+      y: { grid: { color: gridColor }, ticks: { color: textColor, font: { size: 10 }, callback: v => '$' + v + 'K' }, border: { display: false } }
+    }
+  }
+});
+</script>
